@@ -1,0 +1,26 @@
+.container {
+  border: 2px solid black;
+  border-radius: 15px;
+  padding: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.button {
+  width: 100px;
+  margin: 0 auto;
+}
+
+.label span {
+  color: red;
+}
