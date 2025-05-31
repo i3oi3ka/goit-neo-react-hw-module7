@@ -2,9 +2,8 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { object, string } from "yup";
 import style from "./ContactForm.module.css";
 import { useDispatch } from "react-redux";
-import { addContact } from "../../redux/contactsSlice";
-import { nanoid } from "nanoid";
 import { toast } from "react-toastify";
+import { addContact } from "../../redux/contactsOps";
 
 const ContactForm = () => {
   const dispatch = useDispatch();
@@ -22,9 +21,9 @@ const ContactForm = () => {
   });
 
   const handleSubmit = ({ name, number }, actions) => {
-    dispatch(addContact({ id: nanoid(), name, number }));
+    dispatch(addContact({ name, number }));
     toast("Contact saved");
-    actions.reset;
+    actions.resetForm();
   };
 
   return (

@@ -3,30 +3,51 @@ import Contact from "../Contact/Contact";
 import styless from "./ContactList.module.css";
 import ContactListEmpty from "../ContactListEmpty/ContactListEmpty";
 import SearchResultEmpty from "../SearchResultEmpty/SearchResultEmpty";
+import {
+  selectError,
+  selectFilteredContacts,
+  selectLoading,
+} from "../../redux/contactsSlice";
+import { selectNameFilter } from "../../redux/filtersSlice";
+import { ClipLoader } from "react-spinners";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+  color: "#ffffff",
+};
 
 const ContactList = () => {
-  const contacts = useSelector((state) => state.contacts.items);
-  const filter = useSelector((state) => state.filters.name);
-  const filteredContacts =
-    filter !== "" && contacts.length > 0
-      ? contacts.filter((contact) =>
-          contact.name.toLowerCase().includes(filter.toLowerCase())
-        )
-      : contacts;
+  const contacts = useSelector(selectFilteredContacts);
+  const filter = useSelector(selectNameFilter);
+  const isLoading = useSelector(selectLoading);
+  const error = useSelector(selectError);
 
   return (
     <>
-      {filteredContacts.length > 0 ? (
-        <ul className={styless.container}>
-          {filteredContacts.map((contact) => (
-            <Contact key={contact.id} contact={contact} />
-          ))}
-        </ul>
-      ) : filter ? (
-        <SearchResultEmpty />
-      ) : (
-        <ContactListEmpty />
-      )}
+      <ClipLoader
+        color={override.color}
+        loading={isLoading}
+        cssOverride={override}
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+      />
+      {error && <p>{error}</p>}
+      {!isLoading &&
+        !error &&
+        (contacts.length > 0 ? (
+          <ul className={styless.container}>
+            {contacts.map((contact) => (
+              <Contact key={contact.id} contact={contact} />
+            ))}
+          </ul>
+        ) : filter ? (
+          <SearchResultEmpty />
+        ) : (
+          <ContactListEmpty />
+        ))}
     </>
   );
 };
